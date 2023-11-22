@@ -7,4 +7,6 @@ public interface DBConnections {
     void addUser(User user);
     void showAllUsers();
     void showUserByID(int id);
+
+    void deleteUserByID(int id);
 }

@@ -22,6 +22,10 @@ public class MainController  {
 
     private void start(DBConnections dbConnections) {
         dbConnections.connectToDB();
+//        dbConnections.addUser(new User("Tom","Marvollo"));
+//        dbConnections.addUser(new User("Harry","Potter"));
+//        dbConnections.deleteUserByID(1);
+//        dbConnections.showUserByID(2);
         dbConnections.showAllUsers();
     }
 

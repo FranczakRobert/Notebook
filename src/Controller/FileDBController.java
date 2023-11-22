@@ -30,7 +30,7 @@ public class FileDBController implements DBConnections {
 
     @Override
     public void addUser(User user) {
-
+        users.add(user);
     }
 
     @Override
@@ -43,10 +43,27 @@ public class FileDBController implements DBConnections {
 
     @Override
     public void showUserByID(int id) {
-
+        deserialize();
+        for (User user : users) {
+            if (user.getId() == id) {
+                System.out.println("Login: " + user.getLogin());
+                System.out.println("Password: " + user.getPassword());
+                break;
+            }
+        }
     }
 
-
+    @Override
+    public void deleteUserByID(int id) {
+        deserialize();
+        for (User user : users) {
+            if (user.getId() == id) {
+                users.remove(user);
+                System.out.println("[MySQLController] [deleteUserByID] - deleted successfully");
+                break;
+            }
+        }
+    }
     private void createFile() {
         try {
             File file = new File(fileDBName);
