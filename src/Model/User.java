@@ -3,7 +3,6 @@ package Model;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    private static int idCounter;
     private String login;
     private String password;
     private int id;

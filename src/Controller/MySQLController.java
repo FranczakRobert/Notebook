@@ -67,7 +67,7 @@ public class MySQLController implements DBConnections {
             }
         }
         catch (SQLException e) {
-            System.out.println("\nError connecting to the database: " + e.getMessage());
+            System.out.println("\n Error connecting to the database: " + e.getMessage());
         }
     }
 
