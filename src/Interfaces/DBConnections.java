@@ -9,4 +9,6 @@ public interface DBConnections {
     void showUserByID(int id);
 
     void deleteUserByID(int id);
+    int findUserByUsernameAndPassword(String login, String password);
+    void addNotes(int id);
 }

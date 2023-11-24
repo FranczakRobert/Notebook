@@ -64,6 +64,17 @@ public class FileDBController implements DBConnections {
             }
         }
     }
+
+    @Override
+    public int findUserByUsernameAndPassword(String login, String password) {
+        return 0;
+    }
+
+    @Override
+    public void addNotes(int id) {
+
+    }
+
     private void createFile() {
         try {
             File file = new File(fileDBName);

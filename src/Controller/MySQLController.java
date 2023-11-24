@@ -83,4 +83,43 @@ public class MySQLController implements DBConnections {
             System.out.println("\nError connecting to the database: " + e.getMessage());
         }
     }
+
+    @Override
+    public int findUserByUsernameAndPassword(String login, String password) {
+        int id = -1;
+        String query = "SELECT id FROM users WHERE login = ? AND password = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,login);
+            preparedStatement.setString(2,password);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if(resultSet.next()) {
+                    id = resultSet.getInt("id");
+                }
+                else {
+                }
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("\n Error connecting to the database: " + e.getMessage());
+        }
+
+        return id;
+    }
+
+    @Override
+    public void addNotes(int id) {
+        String note = "Dummy note";
+
+        String query = "UPDATE  users SET notes = ? WHERE id = ?";
+
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,note);
+            preparedStatement.setInt(2,id);
+            preparedStatement.executeUpdate();
+        }
+        catch (SQLException e) {
+            System.out.println("[MySQLController] [addNotes]" + e.getMessage());
+        }
+    }
 }

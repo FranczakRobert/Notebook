@@ -22,7 +22,10 @@ public class MainController  {
 
     private void start(DBConnections dbConnections) {
         view.showHeader();
-        view.showMenu();
+        dbConnections.connectToDB();
+        int id = dbConnections.findUserByUsernameAndPassword("Tom","Marvollo");
+        dbConnections.addNotes(id);
+        dbConnections.showAllUsers();
     }
 
     private void init() {
