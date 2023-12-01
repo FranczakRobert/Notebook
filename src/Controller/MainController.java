@@ -23,8 +23,8 @@ public class MainController  {
     private void start(DBConnections dbConnections) {
         view.showHeader();
         dbConnections.connectToDB();
-        int id = dbConnections.findUserByUsernameAndPassword("Tom","Marvollo");
-        dbConnections.addNotes(id);
+//        int id = dbConnections.findUserByUsernameAndPassword("Tom","Marvollo");
+//        dbConnections.addNote(id);
         dbConnections.showAllUsers();
     }
 

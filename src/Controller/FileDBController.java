@@ -71,7 +71,7 @@ public class FileDBController implements DBConnections {
     }
 
     @Override
-    public void addNotes(int id) {
+    public void addNote(int id) {
 
     }
 
@@ -94,9 +94,9 @@ public class FileDBController implements DBConnections {
             oos.writeObject(users);
 
         } catch (FileNotFoundException e) {
-            System.out.println("Error - No file...");
+            System.out.println("[FileDBController] [serialize] - No file...");
         } catch (IOException e) {
-            System.out.println("Erorr...");
+            System.out.println("[FileDBController] [serialize] - " + e.getMessage());
         }
     }
 
@@ -110,7 +110,7 @@ public class FileDBController implements DBConnections {
         } catch (IOException ioe) {
             System.out.println("[FileDBController] [deserialize] - " + ioe.getMessage());
         } catch (ClassNotFoundException c) {
-            System.out.println("Class not found");
+            System.out.println("[FileDBController] [deserialize] - Class not found");
         }
     }
 }

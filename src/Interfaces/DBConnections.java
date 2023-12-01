@@ -10,5 +10,5 @@ public interface DBConnections {
 
     void deleteUserByID(int id);
     int findUserByUsernameAndPassword(String login, String password);
-    void addNotes(int id);
+    void addNote(int id);
 }

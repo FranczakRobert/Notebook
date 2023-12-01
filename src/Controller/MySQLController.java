@@ -29,7 +29,7 @@ public class MySQLController implements DBConnections {
             System.out.println("User added to the database!");
         }
         catch (SQLException e) {
-            System.out.println("\nError connecting to the database: " + e.getMessage());
+            System.out.println("[MySQLController] [addUser] - " + e.getMessage());
         }
     }
 
@@ -39,7 +39,13 @@ public class MySQLController implements DBConnections {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
             while (resultSet.next())
-                System.out.println(resultSet.getInt(1) + "  " + resultSet.getString(2) + "  " + resultSet.getString(3));
+                System.out.println( "\n---------------------------------------------\n" +
+                        resultSet.getInt(1) + " " +
+                        resultSet.getString(2) + " " +
+                        resultSet.getString(3) + " " +
+                        resultSet.getString(4) +
+                                   "\n---------------------------------------------\n");
+
             connection.close();
         }
         catch (Exception e) {
@@ -67,7 +73,7 @@ public class MySQLController implements DBConnections {
             }
         }
         catch (SQLException e) {
-            System.out.println("\n Error connecting to the database: " + e.getMessage());
+            System.out.println("[MySQLController] [showUserByID] - " + e.getMessage());
         }
     }
 
@@ -80,7 +86,7 @@ public class MySQLController implements DBConnections {
             System.out.println("[MySQLController] [deleteUserByID] - deleted successfully");
         }
         catch (SQLException e) {
-            System.out.println("\nError connecting to the database: " + e.getMessage());
+            System.out.println("[MySQLController] [deleteUserByID] -  " + e.getMessage());
         }
     }
 
@@ -101,15 +107,15 @@ public class MySQLController implements DBConnections {
             }
         }
         catch (SQLException e) {
-            System.out.println("\n Error connecting to the database: " + e.getMessage());
+            System.out.println("[MySQLController] [findUserByUsernameAndPassword] - " + e.getMessage());
         }
 
         return id;
     }
 
     @Override
-    public void addNotes(int id) {
-        String note = "Dummy note";
+    public void addNote(int id) {
+        String note = "Dummy";
 
         String query = "UPDATE  users SET notes = ? WHERE id = ?";
 
