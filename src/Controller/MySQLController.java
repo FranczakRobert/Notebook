@@ -13,6 +13,7 @@ public class MySQLController implements DBConnections {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(Names.db_connectionString, Names.db_login,Names.db_password);
+            System.out.println("[INFO] [MySQLController] [connectToDB] - Connection established...");
         }
         catch(Exception e) {
             System.out.println("[MySQLController] [connectToDB] - " + e.getMessage());
@@ -128,4 +129,10 @@ public class MySQLController implements DBConnections {
             System.out.println("[MySQLController] [addNotes]" + e.getMessage());
         }
     }
+
+    @Override
+    public void run() {
+        connectToDB();
+    }
+
 }

@@ -113,4 +113,9 @@ public class FileDBController implements DBConnections {
             System.out.println("[FileDBController] [deserialize] - Class not found");
         }
     }
+
+    @Override
+    public void run() {
+
+    }
 }

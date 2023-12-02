@@ -2,7 +2,7 @@ package Interfaces;
 
 import Model.User;
 
-public interface DBConnections {
+public interface DBConnections extends Runnable{
     void connectToDB();
     void addUser(User user);
     void showAllUsers();
