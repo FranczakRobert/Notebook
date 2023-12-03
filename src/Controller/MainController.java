@@ -2,7 +2,7 @@ package Controller;
 
 import Interfaces.DBConnections;
 import Utils.DbTypeEnum;
-import View.Gui;
+import View.MainGui;
 import View.View;
 
 import java.util.Scanner;
@@ -16,8 +16,7 @@ public class MainController  {
     }
 
     public void startWith(DbTypeEnum dbType) {
-        DBConnections connections;
-        connections = dbType.equals(DbTypeEnum.MYSQL) ? new MySQLController() : new FileDBController();
+        DBConnections connections = dbType.equals(DbTypeEnum.MYSQL) ? new MySQLController() : new FileDBController();
         start(connections);
     }
 
@@ -25,7 +24,7 @@ public class MainController  {
         view.showHeader();
         db = new MySQLController();
         Thread dbConnectionThread = new Thread(db);
-        Thread gui = new Thread(new Gui(db));
+        Thread gui = new Thread(new MainGui(db));
 
         try {
             dbConnectionThread.start();

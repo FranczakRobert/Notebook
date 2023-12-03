@@ -7,17 +7,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Gui extends JFrame implements Runnable {
+public class LoginGui extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private DBConnections dataBase;
 
-    public Gui(DBConnections dbConnections) {
+    public LoginGui(DBConnections dbConnections) {
         dataBase = dbConnections;
-    }
-
-    @Override
-    public void run() {
         initFrame();
         loginPanel();
     }
@@ -32,7 +28,7 @@ public class Gui extends JFrame implements Runnable {
     private void loginPanel() {
         JPanel loginPanel = new JPanel();
         loginPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 5, 30));
-        loginPanel.setLayout(new GridLayout(3, 3, 5, 20)); // 3 wiersze, 2 kolumny, odstępy 5 pikseli
+        loginPanel.setLayout(new GridLayout(3, 1, 5, 20)); // 3 wiersze, 2 kolumny, odstępy 5 pikseli
         loginPanel.setBackground(new Color(43,45,48));
 
         JLabel usernameLabel = new JLabel("Login:",JLabel.CENTER);
@@ -52,11 +48,29 @@ public class Gui extends JFrame implements Runnable {
             }
         });
 
+        JButton backButton = new JButton("back");
+        loginButton.setHorizontalAlignment(SwingConstants.CENTER);
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+
+                // Przejdź do następnego GUI
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Thread mainGUI = new Thread(new MainGui(dataBase));
+                        mainGUI.start();
+                    }
+                });
+            }
+        });
+
         loginPanel.add(usernameLabel);
         loginPanel.add(usernameField);
         loginPanel.add(passwordLabel);
         loginPanel.add(passwordField);
-        loginPanel.add(new JLabel());
+        loginPanel.add(backButton);
         loginPanel.add(loginButton);
 
         add(loginPanel);
@@ -77,30 +91,28 @@ public class Gui extends JFrame implements Runnable {
             JOptionPane.showMessageDialog(this, "Incorrect login or password...");
         }
 
-
         usernameField.setText("");
         passwordField.setText("");
     }
 
     private void afterLogin() {
         // Zamknij bieżącą ramkę logowania
-            dispose();
+        dispose();
 
-            // Przejdź do następnego GUI
-            SwingUtilities.invokeLater(new Runnable() {
-                @Override
-                public void run() {
+        // Przejdź do następnego GUI
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
 //                    new NextGUI();
-                    JFrame frame = new JFrame();
-                    frame.setSize(350,200);
-                    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    frame.getContentPane().setBackground(new Color(43,45,48));
-                    frame.setVisible(true);
-                    frame.setLocationRelativeTo(null);
-                    frame.setResizable(false);
-                }
-            });
+                JFrame frame = new JFrame();
+                frame.setSize(350,200);
+                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.getContentPane().setBackground(new Color(43,45,48));
+                frame.setVisible(true);
+                frame.setLocationRelativeTo(null);
+                frame.setResizable(false);
+            }
+        });
 
     }
-
 }
