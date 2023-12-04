@@ -5,18 +5,32 @@ import Model.User;
 import Utils.Names;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MySQLController implements DBConnections {
     private Connection connection = null;
+    private static MySQLController instance = null;
+    private static final Logger logger = Logger.getLogger(MySQLController.class.getName());
+    private MySQLController() {}
+
+    public static MySQLController getInstance() {
+        if(instance == null)
+            instance = new MySQLController();
+
+        return instance;
+    }
+
     @Override
     public void connectToDB() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(Names.db_connectionString, Names.db_login,Names.db_password);
             System.out.println("[INFO] [MySQLController] [connectToDB] - Connection established...");
+//            logger.log(Level.INFO,"Connection established successfully");
         }
         catch(Exception e) {
-            System.out.println("[MySQLController] [connectToDB] - " + e.getMessage());
+            logger.log(Level.WARNING,"Connection can't be established");
         }
     }
 
@@ -115,19 +129,21 @@ public class MySQLController implements DBConnections {
     }
 
     @Override
-    public void addNote(int id) {
-        String note = "Dummy";
+    public void addNote(int userId) {
 
-        String query = "UPDATE  users SET notes = ? WHERE id = ?";
+    }
 
-        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1,note);
-            preparedStatement.setInt(2,id);
-            preparedStatement.executeUpdate();
+    @Override
+    public boolean checkIfCanBeRegister(String login, String password) {
+        boolean result = false;
+        if(login.contains(" ") || password.contains(" "))
+            return false;
+
+        if(-1 == findUserByUsernameAndPassword(login,password)) {
+            result = true;
         }
-        catch (SQLException e) {
-            System.out.println("[MySQLController] [addNotes]" + e.getMessage());
-        }
+
+        return result;
     }
 
     @Override

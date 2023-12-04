@@ -1,9 +1,11 @@
 package View;
 
 import Interfaces.DBConnections;
+import Model.User;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class RegisterGui extends JFrame {
     private final DBConnections dataBase;
@@ -39,11 +41,18 @@ public class RegisterGui extends JFrame {
         JLabel secPasswordLabel = ComponentsFactory.getInstance().createLabel("Password");
         secPasswordField = new JPasswordField();
 
-        JButton registerButton = new JButton("Register");
-        registerButton.setHorizontalAlignment(SwingConstants.CENTER);
-        registerButton.addActionListener(e -> registerCheck());
+        JButton registerButton = ComponentsFactory.getInstance().createButton("Register");
+        registerButton.addActionListener(e -> registerCheck(dataBase));
 
-        JButton backButton = ComponentsFactory.getInstance().createButton("Back",dataBase);
+        JButton backButton = ComponentsFactory.getInstance().createButton("Back");
+        backButton.addActionListener(e -> {
+            dispose();
+
+            SwingUtilities.invokeLater(() -> {
+                Thread mainGUI = new Thread(new MainGui(dataBase));
+                mainGUI.start();
+            });
+        });
 
         registerPanel.add(usernameLabel);
         registerPanel.add(usernameField);
@@ -57,9 +66,47 @@ public class RegisterGui extends JFrame {
         setVisible(true);
     }
 
-    private void registerCheck() {
+    private void registerCheck(DBConnections dataBase) {
+        StringBuilder password = new StringBuilder();
+        for (char character : passwordField.getPassword()) {
+            password.append(character);
+        }
+
+        if(checkIfPasswordsAreTheSame()) {
+            if(dataBase.checkIfCanBeRegister(usernameField.getText(), Arrays.toString(passwordField.getPassword()))) {
+                dataBase.addUser(new User(usernameField.getText(), password.toString()));
+                dispose();
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new UserPanelGui(dataBase);
+                    }
+                });
+            }
+            else  {
+                JOptionPane.showMessageDialog(this, "Incorrect login or password format - do not use spaces");
+                usernameField.setText("");
+                passwordField.setText("");
+                secPasswordField.setText("");
+            }
+
+
+        }
+        else  {
+            JOptionPane.showMessageDialog(this, "Passwrods are not the same...");
+            usernameField.setText("");
+            passwordField.setText("");
+            secPasswordField.setText("");
+        }
 
     }
+    private boolean checkIfPasswordsAreTheSame() {
+        if(Arrays.equals(passwordField.getPassword(), secPasswordField.getPassword())) {
+            return true;
+        }
+        return false;
+    }
+
 
 
 

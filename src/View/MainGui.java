@@ -12,12 +12,13 @@ public class MainGui extends JFrame implements Runnable{
 
     public MainGui(DBConnections dbConnections) {
         dataBase = dbConnections;
+        run();
     }
 
     @Override
     public void run() {
         initFrame();
-        loginPanel();
+        mainPanel();
     }
 
     private void initFrame() {
@@ -27,7 +28,7 @@ public class MainGui extends JFrame implements Runnable{
         setLocationRelativeTo(null);
         setResizable(false);
     }
-    private void loginPanel() {
+    private void mainPanel() {
         JPanel loginPanel = new JPanel();
         loginPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
         loginPanel.setLayout(new GridLayout(2, 1, 5, 20)); // 3 wiersze, 2 kolumny, odstępy 5 pikseli

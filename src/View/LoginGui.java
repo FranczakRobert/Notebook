@@ -4,8 +4,6 @@ import Interfaces.DBConnections;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class LoginGui extends JFrame {
     private JTextField usernameField;
@@ -31,40 +29,18 @@ public class LoginGui extends JFrame {
         loginPanel.setLayout(new GridLayout(3, 1, 5, 20)); // 3 wiersze, 2 kolumny, odstępy 5 pikseli
         loginPanel.setBackground(new Color(43,45,48));
 
-        JLabel usernameLabel = new JLabel("Login:",JLabel.CENTER);
-        usernameLabel.setForeground(Color.WHITE);
+        JLabel usernameLabel = ComponentsFactory.getInstance().createLabel("Login");
         usernameField = new JTextField();
 
-        JLabel passwordLabel = new JLabel("Password:",JLabel.CENTER);
-        passwordLabel.setForeground(Color.WHITE);
+        JLabel passwordLabel = ComponentsFactory.getInstance().createLabel("Password:");
         passwordField = new JPasswordField();
 
-        JButton loginButton = new JButton("Login");
-        loginButton.setHorizontalAlignment(SwingConstants.CENTER);
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                performLogin();
-            }
-        });
+        JButton loginButton = ComponentsFactory.getInstance().createButton("Login");
+        loginButton.addActionListener(e -> performLogin());
 
         JButton backButton = new JButton("back");
         loginButton.setHorizontalAlignment(SwingConstants.CENTER);
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-
-                // Przejdź do następnego GUI
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Thread mainGUI = new Thread(new MainGui(dataBase));
-                        mainGUI.start();
-                    }
-                });
-            }
-        });
+        backButton.addActionListener(e -> goBack());
 
         loginPanel.add(usernameLabel);
         loginPanel.add(usernameField);
@@ -85,7 +61,9 @@ public class LoginGui extends JFrame {
         checker = dataBase.findUserByUsernameAndPassword(username,password);
 
         if(checker > 0) {
-            afterLogin();
+            dispose();
+
+            SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase));
         }
         else  {
             JOptionPane.showMessageDialog(this, "Incorrect login or password...");
@@ -94,25 +72,9 @@ public class LoginGui extends JFrame {
         usernameField.setText("");
         passwordField.setText("");
     }
-
-    private void afterLogin() {
-        // Zamknij bieżącą ramkę logowania
+    private void goBack() {
         dispose();
-
-        // Przejdź do następnego GUI
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-//                    new NextGUI();
-                JFrame frame = new JFrame();
-                frame.setSize(350,200);
-                setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.getContentPane().setBackground(new Color(43,45,48));
-                frame.setVisible(true);
-                frame.setLocationRelativeTo(null);
-                frame.setResizable(false);
-            }
-        });
-
+        SwingUtilities.invokeLater(() -> new MainGui(dataBase));
     }
+
 }

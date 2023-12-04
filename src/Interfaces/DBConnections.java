@@ -10,5 +10,7 @@ public interface DBConnections extends Runnable{
 
     void deleteUserByID(int id);
     int findUserByUsernameAndPassword(String login, String password);
-    void addNote(int id);
+    void addNote(int userId);
+
+    boolean checkIfCanBeRegister(String login, String password);
 }

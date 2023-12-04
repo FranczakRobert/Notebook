@@ -8,9 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileDBController implements DBConnections {
-
     private List<User> users = new ArrayList<>();
     private final String fileDBName = "Users_Data";
+    private static FileDBController instance = null;
+    private FileDBController(){}
+
+    public static FileDBController getInstance() {
+        if(instance == null)
+            instance = new FileDBController();
+        return instance;
+    }
 
     @Override
     public void connectToDB() {
@@ -73,6 +80,11 @@ public class FileDBController implements DBConnections {
     @Override
     public void addNote(int id) {
 
+    }
+
+    @Override
+    public boolean checkIfCanBeRegister(String login, String password) {
+    return true;
     }
 
     private void createFile() {

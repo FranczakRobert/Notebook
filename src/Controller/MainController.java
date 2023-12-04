@@ -16,13 +16,12 @@ public class MainController  {
     }
 
     public void startWith(DbTypeEnum dbType) {
-        DBConnections connections = dbType.equals(DbTypeEnum.MYSQL) ? new MySQLController() : new FileDBController();
+        DBConnections connections = dbType.equals(DbTypeEnum.MYSQL) ? MySQLController.getInstance() : FileDBController.getInstance();
         start(connections);
     }
 
     private void start(DBConnections db) {
         view.showHeader();
-        db = new MySQLController();
         Thread dbConnectionThread = new Thread(db);
         Thread gui = new Thread(new MainGui(db));
 
