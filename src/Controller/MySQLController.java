@@ -136,8 +136,12 @@ public class MySQLController implements DBConnections {
     @Override
     public boolean checkIfCanBeRegister(String login, String password) {
         boolean result = false;
-        if(login.contains(" ") || password.contains(" "))
+
+        if(login.contains(" ") || password.contains(" ") || login.isEmpty() || password.isEmpty()) {
+            System.out.println(login);
+            System.out.println(password);
             return false;
+        }
 
         if(-1 == findUserByUsernameAndPassword(login,password)) {
             result = true;

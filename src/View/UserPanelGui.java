@@ -23,13 +23,12 @@ public class UserPanelGui extends JFrame{
 
     private void userPanel() {
         JPanel usrPanel = new JPanel();
-        usrPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
-        usrPanel.setLayout(new GridLayout(1, 1, 5, 20)); // 3 wiersze, 2 kolumny, odstępy 5 pikseli
+        usrPanel.setBorder(BorderFactory.createEmptyBorder(10, 200, 200, 200));
+        usrPanel.setLayout(new GridBagLayout()); // Używamy GridBagLayout
         usrPanel.setBackground(new Color(43,45,48));
+
 
         add(usrPanel);
         setVisible(true);
-
     }
-
 }

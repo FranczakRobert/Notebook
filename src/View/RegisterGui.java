@@ -47,7 +47,6 @@ public class RegisterGui extends JFrame {
         JButton backButton = ComponentsFactory.getInstance().createButton("Back");
         backButton.addActionListener(e -> {
             dispose();
-
             SwingUtilities.invokeLater(() -> {
                 Thread mainGUI = new Thread(new MainGui(dataBase));
                 mainGUI.start();
@@ -73,18 +72,13 @@ public class RegisterGui extends JFrame {
         }
 
         if(checkIfPasswordsAreTheSame()) {
-            if(dataBase.checkIfCanBeRegister(usernameField.getText(), Arrays.toString(passwordField.getPassword()))) {
+            if(dataBase.checkIfCanBeRegister(usernameField.getText(), password.toString())) {
                 dataBase.addUser(new User(usernameField.getText(), password.toString()));
                 dispose();
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        new UserPanelGui(dataBase);
-                    }
-                });
+                SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase));
             }
             else  {
-                JOptionPane.showMessageDialog(this, "Incorrect login or password format - do not use spaces");
+                JOptionPane.showMessageDialog(this, "Incorrect login or password format");
                 usernameField.setText("");
                 passwordField.setText("");
                 secPasswordField.setText("");
