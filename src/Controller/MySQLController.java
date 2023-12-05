@@ -106,6 +106,28 @@ public class MySQLController implements DBConnections {
     }
 
     @Override
+    public int findUserByUsername(String login) {
+        int id = -1;
+        String query = "SELECT id FROM users WHERE login = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,login);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if(resultSet.next()) {
+                    id = resultSet.getInt("id");
+                }
+                else {
+                }
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("[MySQLController] [findUserByUsername] - " + e.getMessage());
+        }
+
+        return id;
+    }
+
+    @Override
     public int findUserByUsernameAndPassword(String login, String password) {
         int id = -1;
         String query = "SELECT id FROM users WHERE login = ? AND password = ?";
@@ -122,7 +144,7 @@ public class MySQLController implements DBConnections {
             }
         }
         catch (SQLException e) {
-            System.out.println("[MySQLController] [findUserByUsernameAndPassword] - " + e.getMessage());
+            System.out.println("[MySQLController] [findUserByUsername] - " + e.getMessage());
         }
 
         return id;
@@ -132,27 +154,8 @@ public class MySQLController implements DBConnections {
     public void addNote(int userId) {
 
     }
-
-    @Override
-    public boolean checkIfCanBeRegister(String login, String password) {
-        boolean result = false;
-
-        if(login.contains(" ") || password.contains(" ") || login.isEmpty() || password.isEmpty()) {
-            System.out.println(login);
-            System.out.println(password);
-            return false;
-        }
-
-        if(-1 == findUserByUsernameAndPassword(login,password)) {
-            result = true;
-        }
-
-        return result;
-    }
-
     @Override
     public void run() {
         connectToDB();
     }
-
 }

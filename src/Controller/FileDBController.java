@@ -38,6 +38,7 @@ public class FileDBController implements DBConnections {
     @Override
     public void addUser(User user) {
         users.add(user);
+        serialize();
     }
 
     @Override
@@ -73,18 +74,30 @@ public class FileDBController implements DBConnections {
     }
 
     @Override
+    public int findUserByUsername(String login) {
+        deserialize();
+        for (User user : users) {
+            if(user.getLogin().equals(login)) {
+                return user.getId();
+            }
+        }
+        return 0;
+    }
+
+    @Override
     public int findUserByUsernameAndPassword(String login, String password) {
+        deserialize();
+        for (User user : users) {
+            if(user.getLogin().equals(login) && user.getPassword().equals(password)) {
+                return user.getId();
+            }
+        }
         return 0;
     }
 
     @Override
     public void addNote(int id) {
 
-    }
-
-    @Override
-    public boolean checkIfCanBeRegister(String login, String password) {
-    return true;
     }
 
     private void createFile() {
@@ -112,18 +125,26 @@ public class FileDBController implements DBConnections {
         }
     }
 
-    public void deserialize(){
+    public boolean deserialize(){
         try (FileInputStream fis = new FileInputStream("Users_Data");
              ObjectInputStream ois = new ObjectInputStream(fis);) {
-
             users = (List<User>) ois.readObject();
+
         } catch (FileNotFoundException e) {
             System.out.println("[FileDBController] [deserialize] - " + e.getMessage());
+            return false;
         } catch (IOException ioe) {
             System.out.println("[FileDBController] [deserialize] - " + ioe.getMessage());
+            return false;
         } catch (ClassNotFoundException c) {
             System.out.println("[FileDBController] [deserialize] - Class not found");
+            return false;
         }
+
+        for (User user : users) {
+            System.out.println(user);
+        }
+        return true;
     }
 
     @Override

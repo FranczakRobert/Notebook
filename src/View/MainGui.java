@@ -4,8 +4,6 @@ import Interfaces.DBConnections;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class MainGui extends JFrame implements Runnable{
     private DBConnections dataBase;
@@ -36,22 +34,12 @@ public class MainGui extends JFrame implements Runnable{
 
         JButton loginButton = new JButton("Login");
         loginButton.setHorizontalAlignment(SwingConstants.CENTER);
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                goToLoginPanel();
-            }
-        });
+        loginButton.addActionListener(e -> goToLoginPanel());
 
         JButton registerButton = new JButton("Register");
         registerButton.setHorizontalAlignment(SwingConstants.CENTER);
 
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                goToRegisterPanel();
-            }
-        });
+        registerButton.addActionListener(actionEvent -> goToRegisterPanel());
 
         JLabel header = new JLabel("NOTEPAD \uD83D\uDCD3 ", JLabel.RIGHT);
         header.setForeground(Color.WHITE);
@@ -67,22 +55,12 @@ public class MainGui extends JFrame implements Runnable{
     }
     private void goToLoginPanel() {
         dispose();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new LoginGui(dataBase);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new LoginGui(dataBase));
     }
 
     private void goToRegisterPanel() {
         dispose();
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new RegisterGui(dataBase);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new RegisterGui(dataBase));
     }
 
 }

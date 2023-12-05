@@ -4,7 +4,6 @@ import Interfaces.DBConnections;
 import Utils.DbTypeEnum;
 import View.MainGui;
 import View.View;
-
 import java.util.Scanner;
 
 public class MainController  {
@@ -21,6 +20,7 @@ public class MainController  {
     }
 
     private void start(DBConnections db) {
+
         view.showHeader();
         Thread dbConnectionThread = new Thread(db);
         Thread gui = new Thread(new MainGui(db));

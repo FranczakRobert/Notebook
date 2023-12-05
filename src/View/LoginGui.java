@@ -1,5 +1,6 @@
 package View;
 
+import Controller.LoginController;
 import Interfaces.DBConnections;
 
 import javax.swing.*;
@@ -9,9 +10,11 @@ public class LoginGui extends JFrame {
     private JTextField usernameField;
     private JPasswordField passwordField;
     private DBConnections dataBase;
+    private LoginController loginController;
 
     public LoginGui(DBConnections dbConnections) {
         dataBase = dbConnections;
+        loginController = new LoginController(dataBase);
         initFrame();
         loginPanel();
     }
@@ -36,11 +39,11 @@ public class LoginGui extends JFrame {
         passwordField = new JPasswordField();
 
         JButton loginButton = ComponentsFactory.getInstance().createButton("Login");
-        loginButton.addActionListener(e -> performLogin());
+        loginButton.addActionListener(e -> loginController.performLogin(usernameField,passwordField,this));
 
-        JButton backButton = new JButton("back");
+        JButton backButton = new JButton("Back");
         loginButton.setHorizontalAlignment(SwingConstants.CENTER);
-        backButton.addActionListener(e -> goBack());
+        backButton.addActionListener(e -> loginController.goBack(this));
 
         loginPanel.add(usernameLabel);
         loginPanel.add(usernameField);
@@ -52,29 +55,6 @@ public class LoginGui extends JFrame {
         add(loginPanel);
         setVisible(true);
     }
-    private void performLogin() {
-        int checker = -1;
-        String username = usernameField.getText();
-        char[] passwordChars = passwordField.getPassword();
-        String password = new String(passwordChars);
 
-        checker = dataBase.findUserByUsernameAndPassword(username,password);
-
-        if(checker > 0) {
-            dispose();
-
-            SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase));
-        }
-        else  {
-            JOptionPane.showMessageDialog(this, "Incorrect login or password...");
-        }
-
-        usernameField.setText("");
-        passwordField.setText("");
-    }
-    private void goBack() {
-        dispose();
-        SwingUtilities.invokeLater(() -> new MainGui(dataBase));
-    }
 
 }

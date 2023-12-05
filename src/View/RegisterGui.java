@@ -1,19 +1,20 @@
 package View;
 
+import Controller.RegisterController;
 import Interfaces.DBConnections;
-import Model.User;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 public class RegisterGui extends JFrame {
     private final DBConnections dataBase;
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JPasswordField secPasswordField;
+    RegisterController registerController;
     public RegisterGui(DBConnections dbConnections) {
         this.dataBase = dbConnections;
+        registerController = new RegisterController(dataBase);
         initFrame();
         registerPanel();
     }
@@ -42,7 +43,7 @@ public class RegisterGui extends JFrame {
         secPasswordField = new JPasswordField();
 
         JButton registerButton = ComponentsFactory.getInstance().createButton("Register");
-        registerButton.addActionListener(e -> registerCheck(dataBase));
+        registerButton.addActionListener(e -> registerController.registerProcess(this,usernameField,passwordField,secPasswordField));
 
         JButton backButton = ComponentsFactory.getInstance().createButton("Back");
         backButton.addActionListener(e -> {
@@ -64,45 +65,4 @@ public class RegisterGui extends JFrame {
         add(registerPanel);
         setVisible(true);
     }
-
-    private void registerCheck(DBConnections dataBase) {
-        StringBuilder password = new StringBuilder();
-        for (char character : passwordField.getPassword()) {
-            password.append(character);
-        }
-
-        if(checkIfPasswordsAreTheSame()) {
-            if(dataBase.checkIfCanBeRegister(usernameField.getText(), password.toString())) {
-                dataBase.addUser(new User(usernameField.getText(), password.toString()));
-                dispose();
-                SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase));
-            }
-            else  {
-                JOptionPane.showMessageDialog(this, "Incorrect login or password format");
-                usernameField.setText("");
-                passwordField.setText("");
-                secPasswordField.setText("");
-            }
-
-
-        }
-        else  {
-            JOptionPane.showMessageDialog(this, "Passwrods are not the same...");
-            usernameField.setText("");
-            passwordField.setText("");
-            secPasswordField.setText("");
-        }
-
-    }
-    private boolean checkIfPasswordsAreTheSame() {
-        if(Arrays.equals(passwordField.getPassword(), secPasswordField.getPassword())) {
-            return true;
-        }
-        return false;
-    }
-
-
-
-
-
 }
