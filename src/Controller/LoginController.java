@@ -22,7 +22,7 @@ public class LoginController {
 
         userID = dataBase.findUserByUsernameAndPassword(username,password);
 
-        if(userID > 0) {
+        if(userID > -1) {
             gui.dispose();
 
             int finalUserID = userID;

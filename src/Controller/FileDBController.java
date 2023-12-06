@@ -1,19 +1,16 @@
 package Controller;
 
 import Interfaces.DBConnections;
+import Model.Nvm;
 import Model.User;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FileDBController implements DBConnections {
-    private List<User> users = new ArrayList<>();
-    private Map<Integer,String> notes = new HashMap<>();
     private final String fileDBName = "Users_Data";
     private static FileDBController instance = null;
+    private Nvm nvm = new Nvm();
     private FileDBController(){}
 
     public static FileDBController getInstance() {
@@ -41,14 +38,14 @@ public class FileDBController implements DBConnections {
 
     @Override
     public void addUser(User user) {
-        users.add(user);
+        nvm.getUsers().add(user);
         serialize();
     }
 
     @Override
     public void showAllUsers() {
         deserialize();
-        for (User user : users) {
+        for (User user : nvm.getUsers()) {
             System.out.printf("ID: %d Name: %s Password: %s \n%n", user.getId(),user.getLogin(),user.getPassword());
         }
     }
@@ -56,7 +53,7 @@ public class FileDBController implements DBConnections {
     @Override
     public void showUserByID(int id) {
         deserialize();
-        for (User user : users) {
+        for (User user : nvm.getUsers()) {
             if (user.getId() == id) {
                 System.out.println("Login: " + user.getLogin());
                 System.out.println("Password: " + user.getPassword());
@@ -68,9 +65,9 @@ public class FileDBController implements DBConnections {
     @Override
     public void deleteUserByID(int id) {
         deserialize();
-        for (User user : users) {
+        for (User user : nvm.getUsers()) {
             if (user.getId() == id) {
-                users.remove(user);
+                nvm.getUsers().remove(user);
                 System.out.println("[MySQLController] [deleteUserByID] - deleted successfully");
                 break;
             }
@@ -80,7 +77,7 @@ public class FileDBController implements DBConnections {
     @Override
     public int findUserByUsername(String login) {
         if(deserialize()) {
-            for (User user : users) {
+            for (User user : nvm.getUsers()) {
                 if(user.getLogin().equals(login)) {
                     return user.getId();
                 }
@@ -90,36 +87,46 @@ public class FileDBController implements DBConnections {
             System.out.println("No user");
             return -1;
         }
-
-        return 0;
+        return -1;
     }
 
     @Override
     public int findUserByUsernameAndPassword(String login, String password) {
         deserialize();
-        for (User user : users) {
-            if(user.getLogin().equals(login) && user.getPassword().equals(password)) {
-                return 1;
+        for (int i = 0 ; i < nvm.getUsers().size(); i++) {
+            if(nvm.getUsers().get(i).getLogin().equals(login) && nvm.getUsers().get(i).getPassword().equals(password)) {
+                System.out.println(i);
+                return i;
             }
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public void addNote(int id, String note) {
-        notes.put(id,note);
+        ArrayList<String> array = nvm.getNotes().get(id);
+        if(array == null) {
+            ArrayList<String> newArray = new ArrayList<>();
+            newArray.add(note);
+            nvm.getNotes().put(id,newArray);
+        }
+        else {
+            array.add(note);
+            nvm.getNotes().put(id,array);
+        }
     }
 
     @Override
     public ArrayList<String> getAllNotes(int userId) {
         ArrayList<String> notepad = new ArrayList<>();
-
-        for (Map.Entry<Integer, String> entry : notes.entrySet()) {
+        for (Map.Entry<Integer, ArrayList<String>> entry : nvm.getNotes().entrySet()) {
             if(entry.getKey().equals(userId)) {
-                notepad.add(entry.getValue());
+                for (int i = 0; i < entry.getValue().size(); i++) {
+                    notepad.add(entry.getValue().get(i));
+                }
             }
+            serialize();
         }
-
         return notepad;
     }
 
@@ -139,7 +146,7 @@ public class FileDBController implements DBConnections {
     public void serialize()  {
         try(FileOutputStream output = new FileOutputStream("Users_Data");
             ObjectOutputStream oos = new ObjectOutputStream(output)) {
-            oos.writeObject(users);
+            oos.writeObject(nvm);
 
         } catch (FileNotFoundException e) {
             System.out.println("[FileDBController] [serialize] - No file...");
@@ -148,13 +155,13 @@ public class FileDBController implements DBConnections {
         }
     }
 
-    public boolean deserialize(){
+    public boolean deserialize() {
         try (FileInputStream fis = new FileInputStream("Users_Data");
              ObjectInputStream ois = new ObjectInputStream(fis)) {
-            users = (List<User>) ois.readObject();
+             nvm = (Nvm) ois.readObject();
 
-            for(int i = 0; i < users.size(); i++) {
-                users.get(i).setId(i);
+            for(int i = 0; i < nvm.getUsers().size(); i++) {
+                nvm.getUsers().get(i).setId(i);
             }
 
         } catch (FileNotFoundException e) {
@@ -168,12 +175,12 @@ public class FileDBController implements DBConnections {
             return false;
         }
 
-        for (User user : users) {
-            System.out.println(user.getLogin());
-            System.out.println(user.getPassword());
-            System.out.println(user.getId());
-
-        }
+//        for (User user : nvm.getUsers()) {
+//            System.out.println(user.getLogin());
+//            System.out.println(user.getPassword());
+//            System.out.println(user.getId());
+//
+//        }
         return true;
     }
 
