@@ -17,8 +17,6 @@ public class MyNotesController {
 
     public ArrayList<String> fetchAllNotes() {
         ArrayList<String> notes = dataBase.getAllNotes(userId);
-
-
         return notes;
     }
 

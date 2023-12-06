@@ -5,10 +5,13 @@ import Model.User;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FileDBController implements DBConnections {
     private List<User> users = new ArrayList<>();
+    private Map<Integer,String> notes = new HashMap<>();
     private final String fileDBName = "Users_Data";
     private static FileDBController instance = null;
     private FileDBController(){}
@@ -26,6 +29,7 @@ public class FileDBController implements DBConnections {
                 System.out.println("[INFO] [FileDBController] [connectToDB] - DataBase is empty...");
             }
 
+            System.out.println("[INFO] [FileDBController] [connectToDB] - Connection established...");
         } catch (FileNotFoundException e) {
             System.out.println("[ERROR] [FileDBController] [connectToDB] - " + e.getMessage());
             createFile();
@@ -75,12 +79,18 @@ public class FileDBController implements DBConnections {
 
     @Override
     public int findUserByUsername(String login) {
-        deserialize();
-        for (User user : users) {
-            if(user.getLogin().equals(login)) {
-                return user.getId();
+        if(deserialize()) {
+            for (User user : users) {
+                if(user.getLogin().equals(login)) {
+                    return user.getId();
+                }
             }
         }
+        else  {
+            System.out.println("No user");
+            return -1;
+        }
+
         return 0;
     }
 
@@ -89,7 +99,7 @@ public class FileDBController implements DBConnections {
         deserialize();
         for (User user : users) {
             if(user.getLogin().equals(login) && user.getPassword().equals(password)) {
-                return user.getId();
+                return 1;
             }
         }
         return 0;
@@ -97,12 +107,20 @@ public class FileDBController implements DBConnections {
 
     @Override
     public void addNote(int id, String note) {
-
+        notes.put(id,note);
     }
 
     @Override
     public ArrayList<String> getAllNotes(int userId) {
-        return null;
+        ArrayList<String> notepad = new ArrayList<>();
+
+        for (Map.Entry<Integer, String> entry : notes.entrySet()) {
+            if(entry.getKey().equals(userId)) {
+                notepad.add(entry.getValue());
+            }
+        }
+
+        return notepad;
     }
 
     private void createFile() {
@@ -132,8 +150,12 @@ public class FileDBController implements DBConnections {
 
     public boolean deserialize(){
         try (FileInputStream fis = new FileInputStream("Users_Data");
-             ObjectInputStream ois = new ObjectInputStream(fis);) {
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
             users = (List<User>) ois.readObject();
+
+            for(int i = 0; i < users.size(); i++) {
+                users.get(i).setId(i);
+            }
 
         } catch (FileNotFoundException e) {
             System.out.println("[FileDBController] [deserialize] - " + e.getMessage());
@@ -147,13 +169,16 @@ public class FileDBController implements DBConnections {
         }
 
         for (User user : users) {
-            System.out.println(user);
+            System.out.println(user.getLogin());
+            System.out.println(user.getPassword());
+            System.out.println(user.getId());
+
         }
         return true;
     }
 
     @Override
     public void run() {
-
+        connectToDB();
     }
 }

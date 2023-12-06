@@ -28,7 +28,6 @@ public class MySQLController implements DBConnections {
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(Names.db_connectionString, Names.db_login,Names.db_password);
             System.out.println("[INFO] [MySQLController] [connectToDB] - Connection established...");
-//            logger.log(Level.INFO,"Connection established successfully");
         }
         catch(Exception e) {
             logger.log(Level.WARNING,"Connection can't be established");
