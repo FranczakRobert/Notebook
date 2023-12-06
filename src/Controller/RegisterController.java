@@ -2,6 +2,7 @@ package Controller;
 
 import Interfaces.DBConnections;
 import Model.User;
+import View.MainGui;
 import View.RegisterGui;
 import View.UserPanelGui;
 
@@ -15,6 +16,11 @@ public class RegisterController {
         this.dataBase = connections;
     }
 
+    public void goBack(RegisterGui registerGui){
+        registerGui.dispose();
+        SwingUtilities.invokeLater(() -> new MainGui(dataBase));
+    }
+
     public void registerProcess(RegisterGui registerGui, JTextField usernameField, JPasswordField passwordField, JPasswordField secPasswordField) {
 
         StringBuilder password = new StringBuilder();
@@ -25,8 +31,9 @@ public class RegisterController {
         if(checkIfPasswordsAreTheSame(passwordField,secPasswordField)) {
             if(checkIfCanBeRegister(usernameField.getText(), password.toString())) {
                 dataBase.addUser(new User(usernameField.getText(), password.toString()));
+                int userId = dataBase.findUserByUsername(usernameField.getText());
                 registerGui.dispose();
-                SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase));
+                SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase,userId));
             }
             else  {
                 JOptionPane.showMessageDialog(registerGui, "Incorrect login or password format");
@@ -34,8 +41,6 @@ public class RegisterController {
                 passwordField.setText("");
                 secPasswordField.setText("");
             }
-
-
         }
         else  {
             JOptionPane.showMessageDialog(registerGui, "Passwrods are not the same...");

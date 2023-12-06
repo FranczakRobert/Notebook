@@ -96,8 +96,13 @@ public class FileDBController implements DBConnections {
     }
 
     @Override
-    public void addNote(int id) {
+    public void addNote(int id, String note) {
 
+    }
+
+    @Override
+    public ArrayList<String> getAllNotes(int userId) {
+        return null;
     }
 
     private void createFile() {

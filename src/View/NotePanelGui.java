@@ -1,21 +1,26 @@
 package View;
 
+import Controller.NotePanelController;
 import Interfaces.DBConnections;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class NotePanel extends JFrame {
+public class NotePanelGui extends JFrame {
     private DBConnections dataBase;
+    private int userId;
+    private NotePanelController notePanelController;
 
-    public NotePanel(DBConnections dbConnections) {
+    public NotePanelGui(DBConnections dbConnections, int userId) {
         dataBase = dbConnections;
+        notePanelController = new NotePanelController(dataBase,userId);
+        this.userId = userId;
         initFrame();
         userPanel();
     }
     private void initFrame() {
         setTitle("NOTEPAD \uD83D\uDCD3");
-        setSize(900, 600);
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -25,26 +30,26 @@ public class NotePanel extends JFrame {
 
     private void userPanel() {
         JPanel usrPanel = new JPanel();
-        usrPanel.setBorder(BorderFactory.createEmptyBorder(10, 200, 200, 200));
-        usrPanel.setLayout(new GridBagLayout()); // Używamy GridBagLayout
+        usrPanel.setBorder(BorderFactory.createEmptyBorder(10, 100, 50, 100));
+        usrPanel.setLayout(new GridBagLayout());
         usrPanel.setBackground(new Color(43,45,48));
 
-        // Tworzenie JTextArea, w której będą wyświetlane notatki
         JTextArea textArea = new JTextArea();
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
-        textArea.setBackground(new Color(255, 255, 255)); // Kolor tła JTextArea
+        textArea.setBackground(new Color(255, 255, 255));
 
 
-        // Tworzenie JScrollPane i dodawanie JTextArea do niego
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setViewportView(textArea);
         scrollPane.setBackground(new Color(43,45,48));
 
-        JButton button = new JButton("Add Note"); // Zmiana na standardny JButton
-        JButton backButton = new JButton("Back");
+        JButton button = new JButton("Add Note");
+        notePanelController.saveNote(this,button,textArea);
 
-        // Dodanie komponentów przy użyciu GridBagLayout
+        JButton backButton = new JButton("Back");
+        backButton.addActionListener(e -> notePanelController.goBack(this,userId));
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;

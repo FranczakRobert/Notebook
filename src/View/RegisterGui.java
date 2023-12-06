@@ -46,13 +46,8 @@ public class RegisterGui extends JFrame {
         registerButton.addActionListener(e -> registerController.registerProcess(this,usernameField,passwordField,secPasswordField));
 
         JButton backButton = ComponentsFactory.getInstance().createButton("Back");
-        backButton.addActionListener(e -> {
-            dispose();
-            SwingUtilities.invokeLater(() -> {
-                Thread mainGUI = new Thread(new MainGui(dataBase));
-                mainGUI.start();
-            });
-        });
+        backButton.addActionListener(e -> registerController.goBack(this));
+
 
         registerPanel.add(usernameLabel);
         registerPanel.add(usernameField);

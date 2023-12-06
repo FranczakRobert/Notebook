@@ -5,6 +5,7 @@ import Model.User;
 import Utils.Names;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,8 +61,6 @@ public class MySQLController implements DBConnections {
                         resultSet.getString(3) + " " +
                         resultSet.getString(4) +
                                    "\n---------------------------------------------\n");
-
-            connection.close();
         }
         catch (Exception e) {
             System.out.println("[MySQLController] [showAllUsers] -" + e.getMessage());
@@ -151,9 +150,39 @@ public class MySQLController implements DBConnections {
     }
 
     @Override
-    public void addNote(int userId) {
+    public void addNote(int userId, String note) {
+        String query = "INSERT INTO notes (note, user_id) VALUES (?,?) ";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,note);
+            preparedStatement.setString(2,Integer.toString(userId));
+            preparedStatement.executeUpdate();
+        }
+        catch (SQLException e) {
+            System.out.println("[MySQLController] [addNote] - " + e.getMessage());
+        }
 
     }
+
+    @Override
+    public ArrayList<String> getAllNotes(int userId) {
+        ArrayList<String> notes = new ArrayList<>();
+        String query = "SELECT note FROM notes WHERE user_id = ?";
+        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1,userId);
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String result = resultSet.getString("note");
+                    notes.add(result);
+                }
+            }
+        }
+        catch (SQLException e) {
+            System.out.println("[MySQLController] [showUserByID] - " + e.getMessage());
+        }
+        return notes;
+    }
+
     @Override
     public void run() {
         connectToDB();

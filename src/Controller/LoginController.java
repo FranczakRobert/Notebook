@@ -15,17 +15,18 @@ public class LoginController {
     }
 
     public void performLogin(JTextField usernameField, JPasswordField passwordField, LoginGui gui) {
-        int checker = -1;
+        int userID = -1;
         String username = usernameField.getText();
         char[] passwordChars = passwordField.getPassword();
         String password = new String(passwordChars);
 
-        checker = dataBase.findUserByUsernameAndPassword(username,password);
+        userID = dataBase.findUserByUsernameAndPassword(username,password);
 
-        if(checker > 0) {
+        if(userID > 0) {
             gui.dispose();
 
-            SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase));
+            int finalUserID = userID;
+            SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase, finalUserID));
         }
         else  {
             JOptionPane.showMessageDialog(gui, "Incorrect login or password...");
