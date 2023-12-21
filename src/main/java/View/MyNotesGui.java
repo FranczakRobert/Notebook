@@ -60,7 +60,23 @@ public class MyNotesGui extends JFrame {
         JButton backButton = ComponentsFactory.getInstance().createButton("Back");
         backButton.addActionListener(e -> myNotesController.goBack(this));
 
+
         buttonPanel.add(backButton);
+
+        JTextField noteNumberField = new JTextField();
+        noteNumberField.setColumns(10);
+        JButton deleteButton = ComponentsFactory.getInstance().createButton("Delete");
+
+        deleteButton.addActionListener(e -> myNotesController.deleteNote(this, noteNumberField));
+
+        backButton.addActionListener(e -> myNotesController.goBack(this));
+
+        buttonPanel.add(backButton);
+        buttonPanel.add(ComponentsFactory.getInstance().createLabel("|"));
+        buttonPanel.add(noteNumberField);
+        buttonPanel.add(deleteButton);
+
+
         add(scrollPane, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
 

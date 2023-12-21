@@ -13,7 +13,6 @@ main/java/Controller/UserPanelController.class
 main/java/View/RegisterGui.class
 main/java/View/LoginGui.class
 main/java/Model/User.class
-main/java/Utils/Read.class
 main/java/Controller/FileDBController.class
 main/java/Controller/MySQLController.class
 main/java/Utils/DbTypeEnum.class

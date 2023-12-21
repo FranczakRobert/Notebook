@@ -24,4 +24,15 @@ public class MyNotesController {
         gui.dispose();
         SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase,userId));
     }
+
+    public  void deleteNote(MyNotesGui gui, JTextField noteNumberField) {
+        String noteNumberText = noteNumberField.getText();
+        if (!noteNumberText.isEmpty()) {
+            int noteNumber = Integer.parseInt(noteNumberText);
+            dataBase.deleteNote(noteNumber,userId);
+            gui.dispose();
+            SwingUtilities.invokeLater(() -> new MyNotesGui(dataBase,userId));
+        }
+    }
+
 }

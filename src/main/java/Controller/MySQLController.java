@@ -13,6 +13,7 @@ public class MySQLController implements DBConnections {
     private Connection connection = null;
     private static MySQLController instance = null;
     private static final Logger logger = Logger.getLogger(MySQLController.class.getName());
+
     private MySQLController() {}
 
     public static MySQLController getInstance() {
@@ -181,6 +182,25 @@ public class MySQLController implements DBConnections {
         }
         return notes;
     }
+
+    @Override
+    public void deleteNote(int noteNumber, int userId) {
+
+        /* DO ZAIMPLEMENTOWANIA - DZIAŁA POKI CO NA FILE */
+
+//        String note =
+//
+//        try(PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+//            preparedStatement.setInt(1,noteNumber - 1);
+//            preparedStatement.executeQuery();
+//        }
+//        catch (SQLException e) {
+//            System.out.println("[MySQLController] [showUserByID] - " + e.getMessage());
+//        }
+
+
+    }
+
 
     @Override
     public void run() {

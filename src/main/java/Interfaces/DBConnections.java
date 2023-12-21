@@ -15,4 +15,5 @@ public interface DBConnections extends Runnable{
     int findUserByUsernameAndPassword(String login,String password);
     void addNote(int userId, String note);
     ArrayList<String> getAllNotes(int userId);
+    void deleteNote(int noteNumber, int userId);
 }

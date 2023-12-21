@@ -115,6 +115,7 @@ public class FileDBController implements DBConnections {
             array.add(note);
             nvm.getNotes().put(id,array);
         }
+        serialize();
     }
 
     @Override
@@ -176,13 +177,14 @@ public class FileDBController implements DBConnections {
             return false;
         }
 
-//        for (User user : nvm.getUsers()) {
-//            System.out.println(user.getLogin());
-//            System.out.println(user.getPassword());
-//            System.out.println(user.getId());
-//
-//        }
         return true;
+    }
+
+    @Override
+    public void deleteNote(int noteNumber, int userId) {
+        deserialize();
+        ArrayList<String> notes = nvm.getNotes().get(userId);
+        notes.remove(noteNumber - 1);
     }
 
     @Override
