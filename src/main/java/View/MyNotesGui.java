@@ -57,22 +57,20 @@ public class MyNotesGui extends JFrame {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.BLACK);
+
         JButton backButton = ComponentsFactory.getInstance().createButton("Back");
         backButton.addActionListener(e -> myNotesController.goBack(this));
 
-
-        buttonPanel.add(backButton);
-
         JTextField noteNumberField = new JTextField();
-        noteNumberField.setColumns(10);
-        JButton deleteButton = ComponentsFactory.getInstance().createButton("Delete");
+        noteNumberField.setColumns(3);
 
+        JButton deleteButton = ComponentsFactory.getInstance().createButton("Delete");
         deleteButton.addActionListener(e -> myNotesController.deleteNote(this, noteNumberField));
 
-        backButton.addActionListener(e -> myNotesController.goBack(this));
 
         buttonPanel.add(backButton);
-        buttonPanel.add(ComponentsFactory.getInstance().createLabel("|"));
+        buttonPanel.add(ComponentsFactory.getInstance().createLabel("               Note Number: "));
         buttonPanel.add(noteNumberField);
         buttonPanel.add(deleteButton);
 
