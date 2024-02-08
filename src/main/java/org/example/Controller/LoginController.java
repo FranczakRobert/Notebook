@@ -18,10 +18,10 @@ public class LoginController {
     public void performLogin(JTextField usernameField, JPasswordField passwordField, LoginGui gui) {
         int userID = -1;
         String username = usernameField.getText();
-        char[] passwordChars = passwordField.getPassword();
-        String password = new String(passwordChars);
 
-        userID = dataBase.findUserByUsernameAndPassword(username,password);
+        String encryptedPassword = CryptoController.getInstance().encryptPassword(passwordField.getPassword());
+
+        userID = dataBase.findUserByUsernameAndPassword(username,encryptedPassword);
 
         if(userID > -1) {
             gui.dispose();

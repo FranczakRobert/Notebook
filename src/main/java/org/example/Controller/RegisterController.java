@@ -24,14 +24,11 @@ public class RegisterController {
 
     public void registerProcess(RegisterGui registerGui, JTextField usernameField, JPasswordField passwordField, JPasswordField secPasswordField) {
 
-        StringBuilder password = new StringBuilder();
-        for (char character : passwordField.getPassword()) {
-            password.append(character);
-        }
+        String encryptedPassword = CryptoController.getInstance().encryptPassword(passwordField.getPassword());
 
         if(checkIfPasswordsAreTheSame(passwordField,secPasswordField)) {
-            if(checkIfCanBeRegister(usernameField.getText(), password.toString())) {
-                dataBase.addUser(new User(usernameField.getText(), password.toString()));
+            if(checkIfCanBeRegister(usernameField.getText(), encryptedPassword)) {
+                dataBase.addUser(new User(usernameField.getText(), encryptedPassword));
                 int userId = dataBase.findUserByUsername(usernameField.getText());
                 registerGui.dispose();
                 SwingUtilities.invokeLater(() -> new UserPanelGui(dataBase,userId));
@@ -44,7 +41,7 @@ public class RegisterController {
             }
         }
         else  {
-            JOptionPane.showMessageDialog(registerGui, "Passwrods are not the same...");
+            JOptionPane.showMessageDialog(registerGui, "Passwords are not the same...");
             usernameField.setText("");
             passwordField.setText("");
             secPasswordField.setText("");

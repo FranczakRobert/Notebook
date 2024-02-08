@@ -5,6 +5,6 @@ import org.example.Utils.DbTypeEnum;
 
 public class Main {
     public static void main(String[] args) {
-        new MainController().startWith(DbTypeEnum.FILE);
+        new MainController().startWith(DbTypeEnum.MYSQL);
     }
 }
